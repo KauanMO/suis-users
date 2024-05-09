@@ -1,14 +1,15 @@
 const uuid = require('uuid');
+const ObjectId = require('mongodb').ObjectId;
 const mongodb = require('../database/mongodb');
 
 module.exports.create = async (req, res) => {
-    try {
-        const user = {
-            username: req.body.username,
-            email: req.body.email,
-            password: req.body.password
-        };
+    const user = {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+    };
 
+    try {
         const db = await mongodb.getConnection();
 
         const findByEmail = await db.find({
@@ -24,6 +25,23 @@ module.exports.create = async (req, res) => {
         const insertedUser = await db.insertOne(user);
 
         return res.status(201).send({ id: insertedUser.insertedId });
+    } catch (e) {
+        return res.status(500).send(e);
+    }
+}
+
+module.exports.findById = async (req, res) => {
+    try {
+        const db = await mongodb.getConnection();
+
+        const userFound = await db.findOne({
+            _id: new ObjectId(req.params.id)
+        });
+
+        return res.status(200).send({
+            email: userFound.email,
+            username: userFound.username
+        });
     } catch (e) {
         return res.status(500).send(e);
     }

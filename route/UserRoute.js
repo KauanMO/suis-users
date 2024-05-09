@@ -8,4 +8,8 @@ router.post('/', (req, res) => {
     return userController.create(req, res);
 });
 
+router.get('/:id', (req, res) => {
+    return userController.findById(req, res);
+});
+
 module.exports = router;
