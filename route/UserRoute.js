@@ -16,4 +16,8 @@ router.put('/:id', (req, res) => {
     return userController.update(req, res);
 });
 
+router.delete('/:id', (req, res) => {
+    return userController.deleteById(req, res);
+})
+
 module.exports = router;
