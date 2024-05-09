@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/users', require('./route/UserRoute'))
+app.use('/users', require('./route/UserRoute'));
 
 app.listen(PORT, () => {
     console.log(`Running at htpp://localhost:${PORT}`);

@@ -46,3 +46,23 @@ module.exports.findById = async (req, res) => {
         return res.status(500).send(e);
     }
 }
+
+module.exports.update = async (req, res) => {
+    const user = {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+    };
+
+    console.log(user);
+
+    try {
+        const db = await mongodb.getConnection();
+
+        await db.updateOne({ _id: new ObjectId(req.params.id) }, { $set: user });
+
+        return res.status(200).end();
+    } catch (e) {
+        return res.status(500).send(e);
+    }
+}
