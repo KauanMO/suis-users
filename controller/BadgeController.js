@@ -44,3 +44,13 @@ module.exports.findByUser = async (req, res) => {
         return res.status(e.status || 500).send(e);
     }
 }
+
+module.exports.deleteById = async (req, res) => {
+    try {
+        await service.delete(req.params.id);
+
+        return res.status(204).end();
+    } catch (e) {
+        return res.status(e.status || 500).send(e);
+    }
+}

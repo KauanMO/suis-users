@@ -43,3 +43,13 @@ module.exports.findByUser = async (user) => {
 
     return badgesFound;
 }
+
+module.exports.delete = async (id) => {
+    const db = await mongodb.getConnection("badges");
+
+    await this.findById(id);
+
+    await db.deleteOne({
+        _id: new ObjectId(id)
+    });
+}
