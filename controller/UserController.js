@@ -10,7 +10,7 @@ module.exports.create = async (req, res) => {
 
         return res.status(201).send({ id: insertedUser.insertedId });
     } catch (e) {
-        return res.status(e.status).send(e);
+        return res.status(e.status || 500).send(e);
     }
 }
 
@@ -23,7 +23,7 @@ module.exports.findById = async (req, res) => {
             username: userFound.username
         });
     } catch (e) {
-        return res.status(e.status).send(e);
+        return res.status(e.status || 500).send(e);
     }
 }
 
@@ -39,7 +39,7 @@ module.exports.update = async (req, res) => {
 
         return res.status(200).end();
     } catch (e) {
-        return res.status(e.status).send(e);
+        return res.status(e.status || 500).send(e);
     }
 }
 
@@ -49,6 +49,6 @@ module.exports.deleteById = async (req, res) => {
 
         return res.status(204).end();
     } catch (e) {
-        return res.status(e.status).send(e);
+        return res.status(e.status || 500).send(e);
     }
 }

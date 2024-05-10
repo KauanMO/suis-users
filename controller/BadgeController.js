@@ -12,7 +12,7 @@ module.exports.create = async (req, res) => {
 
         return res.status(201).send({ id: insertedBadge.insertedId });
     } catch (e) {
-        return res.status(e.status).send(e);
+        return res.status(e.status || 500).send(e);
     }
 }
 
@@ -27,6 +27,20 @@ module.exports.findById = async (req, res) => {
             icon: badgeFound.icon,
         })
     } catch (e) {
-        return res.status(e.status).send(e);
+        return res.status(e.status || 500).send(e);
+    }
+}
+
+module.exports.findByUser = async (req, res) => {
+    try {
+        const badgesFound = await service.findByUser(req.params.user);
+
+        if (badgesFound[0] === undefined) {
+            return res.status(204).end();
+        }
+
+        return res.status(200).send(badgesFound)
+    } catch (e) {
+        return res.status(e.status || 500).send(e);
     }
 }

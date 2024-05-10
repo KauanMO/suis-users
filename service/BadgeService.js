@@ -31,3 +31,15 @@ module.exports.findById = async (id) => {
 
     return badgeFound;
 }
+
+module.exports.findByUser = async (user) => {
+    const db = await mongodb.getConnection("badges");
+
+    await UserService.findById(user);
+
+    const badgesFound = await db.find({
+        user: new ObjectId(user)
+    }).toArray();
+
+    return badgesFound;
+}
