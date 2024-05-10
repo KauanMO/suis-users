@@ -15,3 +15,19 @@ module.exports.create = async (badge, user) => {
     );
 }
 
+module.exports.findById = async (id) => {
+    const db = await mongodb.getConnection("badges");
+
+    const badgeFound = await db.findOne({
+        _id: new ObjectId(id)
+    });
+
+    if (badgeFound === null) {
+        throw {
+            message: "Badge não encontrada",
+            status: 404
+        };
+    }
+
+    return badgeFound;
+}
