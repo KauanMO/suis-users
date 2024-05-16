@@ -14,7 +14,7 @@ module.exports.conflict = message => {
 
 module.exports.notFound = message => {
     return {
-        messsage,
+        message,
         status: 404
     }
 }
