@@ -1,12 +1,13 @@
 const service = require('../service/UserService');
 
 module.exports.create = async (req, res) => {
+    console.log(req.body);
     try {
         const insertedUser = await service.create({
             username: req.body.username,
             email: req.body.email,
             password: req.body.password
-        })
+        });
 
         return res.status(201).send({ id: insertedUser.insertedId });
     } catch (e) {
