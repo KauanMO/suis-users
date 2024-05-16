@@ -1,7 +1,6 @@
 const service = require('../service/UserService');
 
 module.exports.create = async (req, res) => {
-    console.log(req.body);
     try {
         const insertedUser = await service.create({
             username: req.body.username,
@@ -9,7 +8,21 @@ module.exports.create = async (req, res) => {
             password: req.body.password
         });
 
-        return res.status(201).send({ id: insertedUser.insertedId });
+        return res.status(201).send(await service.findById(insertedUser.insertedId));
+    } catch (e) {
+        return res.status(e.status || 500).send(e);
+    }
+}
+
+module.exports.login = async (req, res) => {
+    try {
+        const userFound = await service.login({
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password
+        });
+
+        return res.status(200).send({ username: userFound.username, id: userFound._id });
     } catch (e) {
         return res.status(e.status || 500).send(e);
     }

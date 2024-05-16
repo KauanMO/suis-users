@@ -11,3 +11,10 @@ module.exports.conflict = message => {
         status: 409
     };
 }
+
+module.exports.notFound = message => {
+    return {
+        messsage,
+        status: 404
+    }
+}

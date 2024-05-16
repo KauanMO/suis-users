@@ -27,27 +27,27 @@ module.exports.create = async (user) => {
     return await db.insertOne(user);
 }
 
-const checkUserInfo = user => {
-    if (user.username.length < 4) throw errors.badRequest('Insira um nome de usuário válido');
+module.exports.login = async (user) => {
+    const db = await mongodb.getConnection('users');
 
-    if (!checkEmail(user.email)) throw errors.badRequest('Insira um email válido');
+    const userFound = await db.findOne({
+        '$and': [{
+            '$or':
+                [
+                    { username: user.username },
+                    { email: user.email }
+                ]
+        },
+        {
+            password: user.password
+        }]
+    });
 
-    if (!checkPassword(user.password)) throw errors.badRequest('Insira uma senha válida');
-}
+    if (userFound === null) {
+        throw errors.notFound("Usuário não encontrado");
+    }
 
-const checkEmail = email => {
-    return String(email)
-        .toLowerCase()
-        .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
-}
-
-const checkPassword = password => {
-    return String(password)
-        .match(
-            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
-        )
+    return userFound;
 }
 
 module.exports.findById = async (id) => {
@@ -81,4 +81,27 @@ module.exports.deleteById = async (id) => {
     await db.deleteOne({
         _id: new ObjectId(id)
     });
+}
+
+const checkUserInfo = user => {
+    if (user.username.length < 4) throw errors.badRequest('Insira um nome de usuário válido');
+
+    if (!checkEmail(user.email)) throw errors.badRequest('Insira um email válido');
+
+    if (!checkPassword(user.password)) throw errors.badRequest('Insira uma senha válida');
+}
+
+const checkEmail = email => {
+    return String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+}
+
+const checkPassword = password => {
+    return String(password)
+        .match(
+            /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+        )
 }
