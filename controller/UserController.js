@@ -17,12 +17,11 @@ module.exports.create = async (req, res) => {
 module.exports.login = async (req, res) => {
     try {
         const userFound = await service.login({
-            username: req.body.username,
-            email: req.body.email,
+            login: req.body.login,
             password: req.body.password
         });
 
-        return res.status(200).send({ username: userFound.username, id: userFound._id });
+        return res.status(200).send({ username: userFound.username, _id: userFound._id });
     } catch (e) {
         return res.status(e.status || 500).send(e);
     }

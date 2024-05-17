@@ -34,8 +34,8 @@ module.exports.login = async (user) => {
         '$and': [{
             '$or':
                 [
-                    { username: user.username },
-                    { email: user.email }
+                    { username: user.login },
+                    { email: user.login }
                 ]
         },
         {
