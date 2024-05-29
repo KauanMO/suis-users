@@ -16,6 +16,10 @@ router.get('/:id', (req, res) => {
     return userController.findById(req, res);
 });
 
+router.post('/confirm-password/:id', (req, res) => {
+    return userController.confirmPassword(req, res);
+});
+
 router.put('/:id', (req, res) => {
     return userController.update(req, res);
 });

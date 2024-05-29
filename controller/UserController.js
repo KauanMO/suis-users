@@ -5,7 +5,8 @@ module.exports.create = async (req, res) => {
         const insertedUser = await service.create({
             username: req.body.username,
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            tutor: req.body.tutor
         });
 
         return res.status(201).send(await service.findById(insertedUser.insertedId));
@@ -27,13 +28,25 @@ module.exports.login = async (req, res) => {
     }
 }
 
+module.exports.confirmPassword = async (req, res) => {
+    try {
+        const userFound = await service.findById(req.params.id);
+
+        return res.status(userFound.password === req.body.password ? 200 : 203).end();
+    } catch (e) {
+        return res.stats(e.status || 500).send(e);
+    }
+}
+
 module.exports.findById = async (req, res) => {
     try {
         const userFound = await service.findById(req.params.id);
 
         return res.status(200).send({
             email: userFound.email,
-            username: userFound.username
+            username: userFound.username,
+            picture: userFound.picture,
+            tutor: userFound.tutor
         });
     } catch (e) {
         return res.status(e.status || 500).send(e);
